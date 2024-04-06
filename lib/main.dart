@@ -13,7 +13,7 @@ void main() async {
 
   runApp(
     ChangeNotifierProvider(
-      create: (context) => Authentication(),
+      create: (BuildContext context) {},
       child: Chatapp(),
     ),
   );
@@ -26,7 +26,7 @@ class Chatapp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: Authgate(),
+      home: const Authgate(),
     );
   }
 }

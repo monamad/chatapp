@@ -1,28 +1,29 @@
-import 'package:chatapp/services/chat/chat_services.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:chatapp/modes/user.dart';
 
-class Authentication extends ChangeNotifier {
-  UserCredential? user = null;
-  Future<String> loginuser(email, password) async {
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+class Authentication {
+  Future<void> signup(email, password, name) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-      user = userCredential;
-      return userCredential.user!.uid;
-    } on Exception catch (e) {
-      throw Exception(e);
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      userCredential.user!.updateDisplayName(name);
+      FirebaseFirestore.instance
+          .collection('user')
+          .add(Users(email: email, name: name).usertomap());
+    } catch (e) {
+      rethrow;
     }
   }
 
-  Future<UserCredential> signup(email, password, name) async {
-    UserCredential userCredential =
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+  Future<void> login(email, password) async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
-    userCredential.user!.updateDisplayName(name);
-    ChatServices().createChat();
-    return userCredential;
   }
 }

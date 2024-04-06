@@ -5,6 +5,7 @@ import 'package:chatapp/utils/ustils.dart';
 import 'package:chatapp/widgets/botton.dart';
 import 'package:chatapp/widgets/custom_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -77,26 +78,16 @@ class _LoginPageState extends State<LoginPage> {
                       setState(() {
                         isLoding = true;
                       });
-                      setState(() {
-                        isLoding = true;
-                      });
+
                       try {
-                        var user = await Provider.of<Authentication>(context,
-                                listen: false)
-                            .loginuser(
-                                emailController.text, passwordController.text);
+                        await Authentication().login(
+                            emailController.text, passwordController.text);
                       } on FirebaseAuthException catch (e) {
-                        setState(() {
-                          isLoding = false;
-                        });
                         MyUtils.showmassage(context, e.code);
-                      } catch (e) {
-                        setState(() {
-                          isLoding = false;
-                        });
-                        MyUtils.showmassage(
-                            context, 'there was an erorr try again.');
                       }
+                      setState(() {
+                        isLoding = false;
+                      });
                     }
                   },
                 ),

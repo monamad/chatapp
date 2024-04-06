@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
   final void Function()? ontap;
-  RegisterPage({super.key, required this.ontap});
+  const RegisterPage({super.key, required this.ontap});
   static String id = 'RegisterPage';
 
   @override
@@ -83,7 +83,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 myController: passwordController,
                 isPassword: true,
                 ontap: (pass) {
-                  this.pass = pass;
+                  setState(() {
+                    this.pass = pass;
+                  });
                 },
                 hint: 'Password',
               ),
@@ -103,14 +105,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   text: 'Register',
                   ontap: () async {
                     if (_formKey.currentState!.validate()) {
-                      setState(() {
-                        isloding = true;
-                      });
                       try {
-                        await Provider.of<Authentication>(context,
-                                listen: false)
-                            .signup(emailController.text,
-                                passwordController.text, namecontroller.text);
+                        setState(() {
+                          isloding = true;
+                        });
+                        await Authentication().signup(emailController.text,
+                            passwordController.text, namecontroller.text);
                       } on FirebaseAuthException catch (e) {
                         MyUtils.showmassage(context, e.code);
                       } catch (e) {

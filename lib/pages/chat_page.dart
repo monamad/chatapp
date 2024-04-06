@@ -2,23 +2,24 @@ import 'dart:async';
 
 import 'package:chatapp/modes/message.dart';
 import 'package:chatapp/services/chat/chat_services.dart';
+import 'package:chatapp/widgets/chatbox.dart';
 import 'package:chatapp/widgets/customMessageBubble.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class ChatPage extends StatelessWidget {
+  String reciver;
   String message = '';
   final FocusNode _focusNode = FocusNode();
   final _scrollController = ScrollController();
   final TextEditingController textfieldController = TextEditingController();
 
-  ChatPage({super.key});
+  ChatPage({super.key, required this.reciver});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xff2B475E),
       appBar: AppBar(
         actions: [
@@ -28,6 +29,7 @@ class ChatPage extends StatelessWidget {
               color: Colors.black,
             ),
             onPressed: () {
+              Navigator.pop(context);
               FirebaseAuth.instance.signOut();
             },
           )
@@ -50,7 +52,7 @@ class ChatPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: StreamBuilder(
-        stream: ChatServices().getChat(),
+        stream: ChatServices().getChat(reciver),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasData) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -78,55 +80,19 @@ class ChatPage extends StatelessWidget {
                     },
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8, bottom: 1),
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Color(0xff2B475E),
-                    ),
-                    child: TextField(
-                      onTap: () async {
-                        if (_scrollController.position.pixels >=
-                            _scrollController.position.maxScrollExtent - 100) {
-                          await _waitUntilDone(context);
-                        }
-                      },
-                      autofocus: true,
-                      onTapOutside: (event) {
-                        _focusNode.unfocus();
-                      },
-                      controller: textfieldController,
-                      focusNode: _focusNode,
-                      onChanged: (message) {
-                        this.message = message;
-                      },
-                      onSubmitted: (message) async {
-                        sendmessage(message);
-                        _focusNode.requestFocus();
-                      },
-                      style: const TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        suffix: IconButton(
-                          icon: const Icon(
-                            Icons.send,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            sendmessage(message);
-                          },
-                        ),
-                        hintText: "message",
-                        hintStyle: TextStyle(
-                          color: Colors.purple[200],
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Colors.white, width: 1),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                  ),
+                Chatbox(
+                  controller: textfieldController,
+                  onTap: () async {
+                    if (_scrollController.position.pixels >=
+                        _scrollController.position.maxScrollExtent - 100) {
+                      await _waitUntilDone(context);
+                    }
+                  },
+                  focusNode: _focusNode,
+                  onTapOutside: (event) {
+                    //_focusNode.unfocus();
+                  },
+                  sendmessage: sendmessage,
                 )
               ],
             );
@@ -143,11 +109,9 @@ class ChatPage extends StatelessWidget {
 
   void sendmessage(String? message) {
     if (textfieldController.text == '') {
-      ChatServices().sendMessage(('رساله فاضيه'));
-    } else if (message == 'كسم السيسي') {
-      ChatServices().sendMessage(('انتو مش عرفين ان انتو نور عنينا ولا ايه'));
+      ChatServices().sendMessage('رساله فاضيه', reciver);
     } else {
-      ChatServices().sendMessage((message));
+      ChatServices().sendMessage(message, reciver);
     }
     textfieldController.clear();
   }

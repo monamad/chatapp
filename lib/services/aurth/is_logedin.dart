@@ -1,4 +1,4 @@
-import 'package:chatapp/pages/chat_page.dart';
+import 'package:chatapp/pages/friends_page.dart';
 import 'package:chatapp/services/aurth/LoginOrRegister.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +11,12 @@ class Authgate extends StatelessWidget {
     return StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          if (snapshot.hasData)
-            return ChatPage();
-          else
+          if (snapshot.hasData) {
+            print('hi');
+            return FriendsPage();
+          } else {
             return LoginOrRegister();
+          }
         });
   }
 }
