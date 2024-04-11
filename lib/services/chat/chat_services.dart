@@ -38,7 +38,7 @@ class ChatServices {
     }
   }
 
-  void sendMessage(massage, reciver, replayfor) {
+  void sendMessage(massage, reciver, String? replayfor) {
     if (reciver.email != 'بطاطا كونية') {
       String sender = FirebaseAuth.instance.currentUser!.email!;
       final CollectionReference chat = FirebaseFirestore.instance

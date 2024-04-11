@@ -153,10 +153,11 @@ class _ChatPageState extends State<ChatPage> {
 
   void sendmessage(String? message) {
     if (textfieldController.text == '') {
-      ChatServices().sendMessage('رساله فاضيه', widget.reciver, replaymessage);
-    } else {
       ChatServices()
-          .sendMessage(textfieldController.text, widget.reciver, replaymessage);
+          .sendMessage('رساله فاضيه', widget.reciver, replaymessage?.message);
+    } else {
+      ChatServices().sendMessage(
+          textfieldController.text, widget.reciver, replaymessage?.message);
     }
     setState(() {
       isReplayed = true;

@@ -5,7 +5,6 @@ import 'package:chatapp/services/chat/chat_services.dart';
 import 'package:chatapp/widgets/group_chat_message_bubble.dart';
 import 'package:chatapp/widgets/replay_box.dart';
 import 'package:chatapp/widgets/chatbox.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:swipe_to/swipe_to.dart';
@@ -22,6 +21,7 @@ class GroupPage extends StatefulWidget {
 
 class _GroupPageState extends State<GroupPage> {
   Message? replaymessage;
+
   late bool isReplayed = false;
   final FocusNode _focusNode = FocusNode();
 
@@ -153,12 +153,13 @@ class _GroupPageState extends State<GroupPage> {
     );
   }
 
-  void sendmessage(String? message) {
+  void sendmessage(String? tmessage) {
     if (textfieldController.text == '') {
-      ChatServices().sendMessage('رساله فاضيه', widget.reciver, replaymessage);
-    } else {
       ChatServices()
-          .sendMessage(textfieldController.text, widget.reciver, replaymessage);
+          .sendMessage('رساله فاضيه', widget.reciver, replaymessage?.message);
+    } else {
+      ChatServices().sendMessage(
+          textfieldController.text, widget.reciver, replaymessage?.message);
     }
     setState(() {
       isReplayed = true;
