@@ -1,10 +1,7 @@
-import 'dart:math';
-
 import 'package:chatapp/modes/message.dart';
 import 'package:chatapp/modes/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:io' as s;
 
 class ChatServices {
   void createChat() {
@@ -24,38 +21,46 @@ class ChatServices {
     return s1.length == len ? s1 + s2 : s2 + s1;
   }
 
-//abc
-//abcc
   Stream<QuerySnapshot> getChat(reciver) {
     String sender = FirebaseAuth.instance.currentUser!.email!;
-    String temp;
-
-    final Stream<QuerySnapshot> chat = FirebaseFirestore.instance
-        .collection(smailString(reciver, sender))
-        .orderBy('timestamp')
-        .snapshots();
-    return chat;
+    if ('بطاطا كونية' == reciver.email) {
+      final Stream<QuerySnapshot> chat = FirebaseFirestore.instance
+          .collection(reciver.email)
+          .orderBy('timestamp')
+          .snapshots();
+      return chat;
+    } else {
+      final Stream<QuerySnapshot> chat = FirebaseFirestore.instance
+          .collection(smailString(reciver.email, sender))
+          .orderBy('timestamp')
+          .snapshots();
+      return chat;
+    }
   }
 
-  void sendMessage(massage, reciver) {
-    String sender = FirebaseAuth.instance.currentUser!.email!;
-    final CollectionReference chat =
-        FirebaseFirestore.instance.collection(smailString(reciver, sender));
+  void sendMessage(massage, reciver, replayfor) {
+    if (reciver.email != 'بطاطا كونية') {
+      String sender = FirebaseAuth.instance.currentUser!.email!;
+      final CollectionReference chat = FirebaseFirestore.instance
+          .collection(smailString(reciver.email, sender));
 
-    chat.add(Message.create(massage).messagetomap());
+      chat.add(Message.create(massage, replayfor).messagetomap());
+    } else {
+      final CollectionReference chat =
+          FirebaseFirestore.instance.collection(reciver.email);
+
+      chat.add(Message.create(massage, replayfor).messagetomap());
+    }
   }
 
   Future<List<Users>> getFriends() async {
-    List<Users> user = [];
+    List<Users> user = [Users(email: 'بطاطا كونية', name: 'بطاطا كونية')];
     CollectionReference users = FirebaseFirestore.instance.collection('user');
     QuerySnapshot querySnapshot = await users.get();
 
     for (int i = 0; i < querySnapshot.size; i++) {
       Map<dynamic, dynamic> x = querySnapshot.docs[i].data() as Map;
 
-      print('xxx');
-      print(x['email']);
-      print(FirebaseAuth.instance.currentUser!.email);
       if ((x['email']).toLowerCase() ==
           FirebaseAuth.instance.currentUser!.email) {
         continue;

@@ -5,6 +5,7 @@ import 'package:chatapp/widgets/friend_box.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class FriendsPage extends StatefulWidget {
   List<Users>? friendsname;
   FriendsPage({super.key});
@@ -63,8 +64,8 @@ class _FriendsPageState extends State<FriendsPage> {
               itemCount: widget.friendsname!.length,
               itemBuilder: (BuildContext context, int index) {
                 return FriendBox(
-                    name: widget.friendsname![index].name,
-                    email: widget.friendsname![index].email);
+                  reciver: widget.friendsname![index],
+                );
               },
             ))
         : Scaffold(

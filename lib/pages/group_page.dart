@@ -2,25 +2,25 @@ import 'dart:async';
 import 'package:chatapp/modes/message.dart';
 import 'package:chatapp/modes/user.dart';
 import 'package:chatapp/services/chat/chat_services.dart';
+import 'package:chatapp/widgets/group_chat_message_bubble.dart';
 import 'package:chatapp/widgets/replay_box.dart';
 import 'package:chatapp/widgets/chatbox.dart';
-import 'package:chatapp/widgets/privete_chat_message_bubble.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:swipe_to/swipe_to.dart';
 
 // ignore: must_be_immutable
-class ChatPage extends StatefulWidget {
+class GroupPage extends StatefulWidget {
   final Users reciver;
 
-  const ChatPage({super.key, required this.reciver});
+  const GroupPage({super.key, required this.reciver});
 
   @override
-  State<ChatPage> createState() => _ChatPageState();
+  State<GroupPage> createState() => _GroupPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
-  String? replaymessage;
+class _GroupPageState extends State<GroupPage> {
+  Message? replaymessage;
   late bool isReplayed = false;
   final FocusNode _focusNode = FocusNode();
 
@@ -53,9 +53,9 @@ class _ChatPageState extends State<ChatPage> {
               ('lib/assets/images/scholar.png'),
               scale: 2,
             ),
-            Text(
-              widget.reciver.name,
-              style: const TextStyle(color: Colors.white),
+            const Text(
+              " 'بطاطا كونية'",
+              style: TextStyle(color: Colors.white),
             ),
           ],
         ),
@@ -101,7 +101,8 @@ class _ChatPageState extends State<ChatPage> {
                     controller: _scrollController,
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return createmessage(snapshot.data!.docs[index]);
+                      return createmessage(snapshot.data!.docs[index],
+                          snapshot.data!.docs[index].id);
                     },
                   ),
                 ),
@@ -122,7 +123,7 @@ class _ChatPageState extends State<ChatPage> {
                         children: [
                           ReplayBox(
                               reciver: widget.reciver.name,
-                              replaymessage: replaymessage!,
+                              replaymessage: replaymessage!.message,
                               exit: () {
                                 setState(() {
                                   replaymessage = null;
@@ -177,18 +178,19 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
-  Widget createmessage(data) {
+  Widget createmessage(data, id) {
+    // print(id);
     Message message = Message.get(data.data());
     return SwipeTo(
       onRightSwipe: (details) {
         setState(() {
-          replaymessage = message.message;
+          replaymessage = message;
         });
 
         //
       },
       child: Container(
-          color: const Color(0xff2B475E), child: PriveteMessageBubble(message)),
+          color: const Color(0xff2B475E), child: GroupMessageBubble(message)),
     );
   }
 }

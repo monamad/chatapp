@@ -7,7 +7,7 @@ class CustomFormTextField extends StatelessWidget {
   Function(String) ontap;
   String? confirmedpass;
   bool? notconfirmedpass;
-  final myController;
+  final TextEditingController myController;
   CustomFormTextField(
       {super.key,
       required this.hint,
@@ -21,6 +21,8 @@ class CustomFormTextField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(3.0),
       child: TextFormField(
+        scrollPadding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom + 12 * 4),
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'this field is required';

@@ -1,20 +1,18 @@
-import 'package:chatapp/modes/message.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class Chatbox extends StatelessWidget {
   String message = '';
   final TextEditingController controller;
   final FocusNode focusNode;
   final Function(String) sendmessage;
   final Function() onTap;
-  final Function(PointerDownEvent) onTapOutside;
 
   Chatbox(
       {super.key,
       required this.controller,
       required this.focusNode,
       required this.onTap,
-      required this.onTapOutside,
       required this.sendmessage});
 
   @override
@@ -27,7 +25,6 @@ class Chatbox extends StatelessWidget {
           ),
           child: TextField(
             onTap: onTap,
-            onTapOutside: onTapOutside,
             controller: controller,
             focusNode: focusNode,
             onChanged: (message) {

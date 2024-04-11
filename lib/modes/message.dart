@@ -6,25 +6,29 @@ class Message {
   dynamic timestamp;
   String senderId;
   String senderName;
-  Message({
-    required this.senderName,
-    required this.senderId,
-    required this.message,
-    required this.timestamp,
-  });
-  factory Message.create(String message) {
+  String? replayedfor;
+
+  Message(
+      {required this.senderName,
+      required this.senderId,
+      required this.message,
+      required this.timestamp,
+      this.replayedfor});
+  factory Message.create(String message, String? replayedfo) {
     return Message(
         message: message,
         senderId: FirebaseAuth.instance.currentUser!.uid,
         senderName: FirebaseAuth.instance.currentUser!.displayName!,
-        timestamp: FieldValue.serverTimestamp());
+        timestamp: FieldValue.serverTimestamp(),
+        replayedfor: replayedfo);
   }
   factory Message.get(Map<String, dynamic> data) {
     return Message(
         message: data['message'],
         senderId: data['senderId'],
         senderName: data['senderName'],
-        timestamp: data['timestamp']);
+        timestamp: data['timestamp'],
+        replayedfor: data['replayedfor']);
   }
 
   Map<String, dynamic> messagetomap() {
@@ -33,6 +37,7 @@ class Message {
       'timestamp': timestamp,
       'senderId': senderId,
       'senderName': senderName,
+      'replayedfor': replayedfor
     };
   }
 }

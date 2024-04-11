@@ -42,6 +42,7 @@ dependencies:
   cloud_firestore: ^4.15.8
   provider: ^6.1.2
   firebase_messaging: ^14.7.19
+  swipe_to: ^1.0.6
 
 dev_dependencies:
   flutter_test:

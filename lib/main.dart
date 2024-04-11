@@ -1,4 +1,3 @@
-import 'package:chatapp/services/aurth/authentication.dart';
 import 'package:chatapp/services/aurth/is_logedin.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,12 +13,14 @@ void main() async {
   runApp(
     ChangeNotifierProvider(
       create: (BuildContext context) {},
-      child: Chatapp(),
+      child: const Chatapp(),
     ),
   );
 }
 
 class Chatapp extends StatelessWidget {
+  const Chatapp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

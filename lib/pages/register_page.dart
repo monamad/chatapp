@@ -7,7 +7,6 @@ import 'package:chatapp/widgets/custom_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
   final void Function()? ontap;
@@ -37,13 +36,13 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xff2B475E),
       body: Padding(
-        padding: const EdgeInsets.only(right: 8, left: 8, top: 60),
+        padding: const EdgeInsets.only(right: 8, left: 8, top: 60, bottom: 20),
         child: Form(
           key: _formKey,
           child: ListView(
-            shrinkWrap: true,
             children: [
               Center(
                 child: Image.asset(('lib/assets/images/scholar.png')),
@@ -59,7 +58,6 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               Text(
                 "Register",
-                textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: 30,
                   color: Colors.purple[300],

@@ -5,14 +5,12 @@ import 'package:chatapp/utils/ustils.dart';
 import 'package:chatapp/widgets/botton.dart';
 import 'package:chatapp/widgets/custom_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key, required this.ontap});
+  const LoginPage({super.key, required this.ontap});
   static String id = 'LoginPage';
   final void Function()? ontap;
   @override
@@ -29,9 +27,10 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //resizeToAvoidBottomInset: true,
       backgroundColor: const Color(0xff2B475E),
       body: Padding(
-        padding: const EdgeInsets.only(right: 8, left: 8, top: 70),
+        padding: const EdgeInsets.only(right: 8, left: 8, top: 10),
         child: Form(
           key: _formKey,
           child: ListView(
@@ -50,7 +49,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Text(
                 "Login",
-                textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: 30,
                   color: Colors.purple[300],
