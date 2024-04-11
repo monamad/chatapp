@@ -20,7 +20,7 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  String? replaymessage;
+  Message? replaymessage;
   late bool isReplayed = false;
   final FocusNode _focusNode = FocusNode();
 
@@ -182,7 +182,7 @@ class _ChatPageState extends State<ChatPage> {
     return SwipeTo(
       onRightSwipe: (details) {
         setState(() {
-          replaymessage = message.message;
+          replaymessage = message;
         });
 
         //
